@@ -19,7 +19,9 @@ export default function CopyClipboard({ value, ...other }: Props) {
 
   const onCopy = () => {
     if (value) {
-      enqueueSnackbar("Copied!");
+      enqueueSnackbar("Copied!", {
+        variant: "success",
+      });
     }
   };
 
