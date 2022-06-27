@@ -1,11 +1,24 @@
 import React from "react";
 import { Stack } from "@mui/material";
 import MainHeader from "./MainHeader";
+import UrlDrawer from "../../components/urlDrawer/UrlDrawer";
+import useURLDrawer from "../../hooks/useURLDrawer";
+import { URLDrawerContextProvider } from "../../context/URLDrawerContext";
 
 type Props = {
   children: React.ReactNode;
 };
+
 export default function MainLayout({ children }: Props) {
+  return (
+    <URLDrawerContextProvider>
+      <Content>{children}</Content>
+    </URLDrawerContextProvider>
+  );
+}
+
+function Content({ children }: Props) {
+  const { open } = useURLDrawer();
   return (
     <Stack
       sx={{
@@ -13,8 +26,8 @@ export default function MainLayout({ children }: Props) {
       }}
     >
       <MainHeader />
-      <p>Hello</p>
       {children}
+      <UrlDrawer open={open} />
     </Stack>
   );
 }
