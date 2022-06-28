@@ -2,7 +2,7 @@ import { Stack, Typography, List, ListItem, Icon } from "@mui/material";
 import React from "react";
 import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 import InsightsIcon from "@mui/icons-material/Insights";
-import BoltLogo from "../../components/Bolt";
+import BoltLogo from "../../components/BoltLogo";
 
 const RightHeroSection = () => {
   return (

@@ -11,7 +11,7 @@ import Image from "next/image";
 import React from "react";
 import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 import InsightsIcon from "@mui/icons-material/Insights";
-import BoltLogo from "../Bolt";
+import BoltLogo from "../BoltLogo";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
 
 export type HomeCardProps = {

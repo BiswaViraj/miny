@@ -1,7 +1,7 @@
 import { Box, Divider, styled, Typography } from "@mui/material";
 import { Container } from "@mui/system";
 import React from "react";
-import BoltLogo from "../../components/Bolt";
+import BoltLogo from "../../components/BoltLogo";
 import Copyright from "../../components/Copyright";
 
 const RootStyle = styled(Box)(({ theme }) => ({

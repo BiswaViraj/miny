@@ -3,7 +3,7 @@ import React from "react";
 import HomeCard from "../../components/main/HomeCard";
 import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 import InsightsIcon from "@mui/icons-material/Insights";
-import BoltLogo from "../../components/Bolt";
+import BoltLogo from "../../components/BoltLogo";
 import type { HomeCardProps } from "../../components/main/HomeCard";
 
 type CardType = {

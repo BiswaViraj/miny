@@ -1,6 +1,6 @@
 import { AppBar, Box, Button, Stack, Toolbar, Typography } from "@mui/material";
 import React from "react";
-import BoltLogo from "../../components/Bolt";
+import BoltLogo from "../../components/BoltLogo";
 import Link from "../../components/Link";
 import useURLDrawer from "../../hooks/useURLDrawer";
 
@@ -35,12 +35,16 @@ const MainHeader = () => {
           </Box>
           <Stack spacing={1} direction="row">
             <Button onClick={openURLDrawer}>My URLs</Button>
-            <Button variant="text" color="secondary">
-              Login
-            </Button>
-            <Button variant="text" color="secondary">
-              Signup
-            </Button>
+            <Link href="/auth/login" underline="none">
+              <Button variant="text" color="secondary">
+                Login
+              </Button>
+            </Link>
+            <Link href="/auth/signup" underline="none">
+              <Button variant="text" color="secondary">
+                Signup
+              </Button>
+            </Link>
           </Stack>
         </Toolbar>
       </AppBar>
