@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FormProvider, RHFDatePicker, RHFTextField } from "../hookForm";
 import {
+  Alert,
   Button,
   Icon,
   InputAdornment,
@@ -20,6 +21,7 @@ import axiosInstance from "../../utils/axios";
 import CopyClipboard from "../CopyClipboard";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import { URLType } from "../../types/url.type";
+import useURLDrawer from "../../hooks/useURLDrawer";
 
 type FormValuesProps = {
   originalURL: string;
@@ -62,6 +64,7 @@ const URLInput = () => {
   });
 
   const [urls, setUrls] = useLocalStorage<URLType[]>("local-urls", []);
+  const { setOpen } = useURLDrawer();
 
   const methods = useForm<FormValuesProps>({
     resolver: yupResolver(URLSchema),
@@ -117,10 +120,16 @@ const URLInput = () => {
     reset();
   };
 
+  const handleMyUrlBtn = () => {
+    setOpen(true);
+  };
   return (
     <Box>
       {shortURL.show && shortURL.value ? (
         <Stack spacing={3}>
+          <Alert severity="success" variant="outlined">
+            URL Minyfied!
+          </Alert>
           <Stack spacing={1}>
             <Typography>Original URL:</Typography>
             <TextField value={getValues("originalURL")} disabled fullWidth />
@@ -136,7 +145,9 @@ const URLInput = () => {
               md: "row",
             }}
           >
-            <Button variant="outlined">My URLs</Button>
+            <Button variant="outlined" onClick={handleMyUrlBtn}>
+              My URLs
+            </Button>
             <Button variant="contained" onClick={handleShortenAnotherBtn}>
               Shorten Another
             </Button>

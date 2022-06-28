@@ -14,6 +14,7 @@ import { URLType } from "../../types/url.type";
 import LinkIcon from "@mui/icons-material/Link";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { fDate } from "../../utils/formatTime";
+import CopyClipboard from "../CopyClipboard";
 
 type Props = {
   url: URLType;
@@ -63,9 +64,7 @@ const DrawerListItem = ({ url }: Props) => {
           </Box>
         </Stack>
         <Stack direction={"row"} spacing={1}>
-          <Button variant="contained" size="small">
-            Copy
-          </Button>
+          <CopyClipboard value={shortURL} type="btn" />
           <Tooltip title="Login to use Edit feature">
             <span>
               <Button variant="outlined" size="small" disabled>

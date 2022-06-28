@@ -7,14 +7,20 @@ import {
   IconButton,
   InputAdornment,
   Icon,
+  Button,
 } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 type Props = {
   value: string;
+  type?: "input" | "btn";
 };
 
-export default function CopyClipboard({ value, ...other }: Props) {
+export default function CopyClipboard({
+  value,
+  type = "input",
+  ...other
+}: Props) {
   const { enqueueSnackbar } = useSnackbar();
 
   const onCopy = () => {
@@ -24,6 +30,22 @@ export default function CopyClipboard({ value, ...other }: Props) {
       });
     }
   };
+
+  if (type === "btn") {
+    return (
+      <CopyToClipboard text={value} onCopy={onCopy}>
+        <Tooltip title="Copy">
+          <Button
+            variant="contained"
+            size="small"
+            endIcon={<ContentCopyIcon />}
+          >
+            Copy
+          </Button>
+        </Tooltip>
+      </CopyToClipboard>
+    );
+  }
 
   return (
     <TextField
