@@ -1,6 +1,7 @@
 import { Stack } from "@mui/material";
 import React from "react";
 import { URLDrawerContextProvider } from "../../context/URLDrawerContext";
+import MainFooter from "../main/MainFooter";
 import DashboardHeader from "./DashboardHeader";
 
 type Props = {
@@ -17,6 +18,7 @@ const DashboardLayout = ({ children }: Props) => {
         <DashboardHeader />
         {children}
       </Stack>
+      <MainFooter />
     </URLDrawerContextProvider>
   );
 };

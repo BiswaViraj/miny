@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
+import PieChart from "../../src/components/Chart/PieChart";
 import SummaryCards from "../../src/components/dashboard/SummaryCards";
 import URLInput from "../../src/components/urlInput/URLInput";
 import useAuth from "../../src/hooks/useAuth";
@@ -113,7 +114,25 @@ const DashBoard: NextPageWithLayout = () => {
                   <URLInput />
                 </Card>
               </Grid>
-              <Grid item md={6} xs={12}></Grid>
+              <Grid item md={6} xs={12}>
+                <PieChart
+                  chartData={[
+                    {
+                      label: "Mobile",
+                      value: 5,
+                    },
+                    {
+                      label: "Desktop",
+                      value: 3,
+                    },
+                    {
+                      label: "Other",
+                      value: 2,
+                    },
+                  ]}
+                  title="Device Types"
+                />
+              </Grid>
             </Grid>
           </Box>
         </Stack>
