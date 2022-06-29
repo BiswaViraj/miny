@@ -18,17 +18,21 @@ import { privateAxiosInstance } from "../../src/utils/axios";
 import { BASE_ENPOINTS } from "../../src/utils/constant";
 import { NextPageWithLayout } from "../_app";
 
-type ServerProps = {
-  urls: string[];
-  isError: boolean;
-};
-
-type Props = ServerProps;
+type Analytics = {
+  id: string;
+  deviceType: string;
+}[];
 
 const DashBoard: NextPageWithLayout = () => {
   const { user } = useAuth();
   const [urls, setUrls] = React.useState([]);
-  const [analytics, setAnalytics] = React.useState([]);
+  const [analytics, setAnalytics] = React.useState<Analytics>([]);
+
+  const [deviceTypes, setDeviceTypes] = React.useState({
+    mobile: 0,
+    desktop: 0,
+    other: 0,
+  });
 
   React.useEffect(() => {
     const fetchUrls = async () => {
@@ -46,11 +50,29 @@ const DashBoard: NextPageWithLayout = () => {
         const res = await privateAxiosInstance.get(BASE_ENPOINTS.analytic);
 
         setAnalytics(res.data.analytics);
+
+        const mobileType = res.data.analytics.filter(
+          (data: any) => data?.deviceType === "mobile"
+        );
+        const desktopType = res.data.analytics.filter(
+          (data: any) => data?.deviceType === "desktop"
+        );
+        const otherType = res.data.analytics.filter(
+          (data: any) =>
+            data?.deviceType !== "mobile" && data?.deviceType === "desktop"
+        );
+
+        setDeviceTypes({
+          mobile: mobileType.length,
+          desktop: desktopType.length,
+          other: otherType.length,
+        });
       } catch (error) {
         console.error(error);
       }
     };
-  });
+    fetchAnalytics();
+  }, []);
 
   // if (isError)
   //   return (
@@ -119,15 +141,15 @@ const DashBoard: NextPageWithLayout = () => {
                   chartData={[
                     {
                       label: "Mobile",
-                      value: 5,
+                      value: deviceTypes.mobile,
                     },
                     {
                       label: "Desktop",
-                      value: 3,
+                      value: deviceTypes.desktop,
                     },
                     {
                       label: "Other",
-                      value: 2,
+                      value: deviceTypes.other,
                     },
                   ]}
                   title="Device Types"
