@@ -17,11 +17,12 @@ import {
 import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 import LoadingButton from "../LoadingButton";
 import { APP_BASE_URL, BASE_ENPOINTS } from "../../utils/constant";
-import axiosInstance from "../../utils/axios";
+import { privateAxiosInstance, publicAxiosInstance } from "../../utils/axios";
 import CopyClipboard from "../CopyClipboard";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import { URLType } from "../../types/url.type";
 import useURLDrawer from "../../hooks/useURLDrawer";
+import useAuth from "../../hooks/useAuth";
 
 type FormValuesProps = {
   originalURL: string;
@@ -66,6 +67,8 @@ const URLInput = () => {
   const [urls, setUrls] = useLocalStorage<URLType[]>("local-urls", []);
   const { setOpen } = useURLDrawer();
 
+  const { isAuthenticated } = useAuth();
+
   const methods = useForm<FormValuesProps>({
     resolver: yupResolver(URLSchema),
     defaultValues,
@@ -81,13 +84,20 @@ const URLInput = () => {
 
   const onSubmit = async (values: FormValuesProps) => {
     try {
-      const url = `${BASE_ENPOINTS.url}/create`;
+      const url = isAuthenticated
+        ? `${BASE_ENPOINTS.url}/create/private`
+        : `${BASE_ENPOINTS.url}/create`;
       const { originalURL, customURL, timeout } = values;
       const payload = {
         originalURL,
         customURL,
         timeout,
       };
+
+      const axiosInstance = isAuthenticated
+        ? privateAxiosInstance
+        : publicAxiosInstance;
+
       const { data } = await axiosInstance.post(url, {
         ...payload,
       });

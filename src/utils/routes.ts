@@ -24,5 +24,6 @@ export const PATH_DASHBOARD = {
   general: {
     app: path(ROOTS_DASHBOARD, "/app"),
     analytics: path(ROOTS_DASHBOARD, "/analytics"),
+    urls: path(ROOTS_DASHBOARD, "/url"),
   },
 };

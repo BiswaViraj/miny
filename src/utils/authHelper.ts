@@ -2,7 +2,7 @@ import jwtDecode from "jwt-decode";
 // routes
 import { PATH_AUTH } from "./routes";
 //
-import axios from "./axios";
+import { privateAxiosInstance } from "./axios";
 
 // ----------------------------------------------------------------------
 
@@ -41,14 +41,15 @@ const handleTokenExpired = (exp: number) => {
 const setSession = (accessToken: string | null) => {
   if (accessToken) {
     localStorage.setItem("accessToken", accessToken);
-    axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+    privateAxiosInstance.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${accessToken}`;
 
-    // This function below will handle when token is expired
     const { exp } = jwtDecode<{ exp: number }>(accessToken);
     handleTokenExpired(exp);
   } else {
     localStorage.removeItem("accessToken");
-    delete axios.defaults.headers.common.Authorization;
+    delete privateAxiosInstance.defaults.headers.common.Authorization;
   }
 };
 

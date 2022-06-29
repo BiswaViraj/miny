@@ -1,14 +1,8 @@
 import { createContext, ReactNode, useEffect, useReducer } from "react";
-// utils
-import axios from "../utils/axios";
-import { isValidToken, setSession } from "../utils/authHelper";
-// @types
+import { publicAxiosInstance } from "../utils/axios";
+import { setSession } from "../utils/authHelper";
 import { ActionMap, AuthState, AuthUser, AuthContextType } from "../types/auth";
 import { BASE_ENPOINTS } from "../utils/constant";
-import useLocalStorage from "../hooks/useLocalStorage";
-import useReadLocalStorage from "../hooks/useReadLocalStorage";
-
-// ----------------------------------------------------------------------
 
 enum Types {
   Initial = "INITIALIZE",
@@ -64,8 +58,7 @@ const JWTReducer = (state: AuthState, action: JWTActions) => {
     case "REGISTER":
       return {
         ...state,
-        isAuthenticated: true,
-        user: action.payload.user,
+        isAuthenticated: false,
       };
 
     default:
@@ -84,63 +77,35 @@ type AuthProviderProps = {
 function AuthProvider({ children }: AuthProviderProps) {
   const [state, dispatch] = useReducer(JWTReducer, initialState);
 
-  const accessToken = useReadLocalStorage<string | null>("accessToken");
-
-  useEffect(() => {
-    const initialize = async () => {
-      try {
-        const token = typeof window !== "undefined" ? accessToken : "";
-
-        if (token && isValidToken(token)) {
-          setSession(token);
-
-          const response = await axios.get("/api/account/my-account");
-          const { user } = response.data;
-
-          dispatch({
-            type: Types.Initial,
-            payload: {
-              isAuthenticated: true,
-              user,
-            },
-          });
-        } else {
-          dispatch({
-            type: Types.Initial,
-            payload: {
-              isAuthenticated: false,
-              user: null,
-            },
-          });
-        }
-      } catch (err) {
-        console.error(err);
-        dispatch({
-          type: Types.Initial,
-          payload: {
-            isAuthenticated: false,
-            user: null,
-          },
-        });
-      }
-    };
-
-    initialize();
-  }, [accessToken]);
-
   const login = async (email: string, password: string) => {
-    const response = await axios.post(`${BASE_ENPOINTS.auth}/login`, {
-      email,
-      password,
-    });
-    const { accessToken, user } = response.data;
+    const response = await publicAxiosInstance.post(
+      `${BASE_ENPOINTS.auth}/login`,
+      {
+        email,
+        password,
+      }
+    );
+    const {
+      accessToken,
+      firstName,
+      lastName,
+      refreshToken,
+      userId,
+      email: resEmail,
+    } = response.data?.data;
 
     setSession(accessToken);
 
     dispatch({
       type: Types.Login,
       payload: {
-        user,
+        user: {
+          firstName,
+          lastName,
+          refreshToken,
+          userId,
+          email: resEmail,
+        },
       },
     });
   };
@@ -151,12 +116,15 @@ function AuthProvider({ children }: AuthProviderProps) {
     firstName: string,
     lastName: string
   ) => {
-    const response = await axios.post("/api/account/register", {
-      email,
-      password,
-      firstName,
-      lastName,
-    });
+    const response = await publicAxiosInstance.post(
+      `${BASE_ENPOINTS.auth}/signup`,
+      {
+        email,
+        password,
+        firstName,
+        lastName,
+      }
+    );
     const { accessToken, user } = response.data;
 
     localStorage.setItem("accessToken", accessToken);
